@@ -26,7 +26,7 @@ import img6 from "./6.png";
 function Snowman({
       images=[img0, img1, img2, img3, img4, img5, img6],
       words=["apple"],
-      maxWrong=6,
+      maxWrong= images.length - 1,
     }) {
   /** by default, allow 6 guesses and use provided gallows images. */
 
@@ -73,11 +73,19 @@ function Snowman({
     ));
   }
 
+  /** displayAnswer: return div of answer */
+  function displayAnswer() {
+    return answer
+  }
+
   return (
       <div className="Snowman">
+        <div className="nWrong">Number wrong: {nWrong}</div>
         <img src={(images)[nWrong]} alt={nWrong} />
-        <p className="Snowman-word">{guessedWord()}</p>
-        <p>{generateButtons()}</p>
+        <p className="Snowman-word">{nWrong === maxWrong ? displayAnswer(): guessedWord()}</p>
+        {nWrong === maxWrong && <p className="Snowman-lose">You lose!</p> }
+        {nWrong !== maxWrong && <p className="Snowman-buttons">{generateButtons()}</p>}
+
       </div>
   );
 }
