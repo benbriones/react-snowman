@@ -96,16 +96,16 @@ function Snowman({
   }
 
 
-  const guessed = (nWrong !== maxWrong && answer !== [...guessedLetters].join(''));
+  // const guessed = (nWrong !== maxWrong && answer !== [...guessedLetters].join(''));
 
   return (
       <div className="Snowman">
         <div className="nWrong">Number wrong: {nWrong}</div>
         <img src={(images)[nWrong]} alt={nWrong} />
         <p className="Snowman-word">{nWrong === maxWrong ? displayAnswer(): guessedWord()}</p>
-        {answer === [...guessedLetters].join('') && <p className="Snowman-lose">You win!</p> }
+        {/* {answer === [...guessedLetters].join('') && <p className="Snowman-lose">You win!</p> } */}
         {nWrong === maxWrong && <p className="Snowman-lose">You lose!</p> }
-        {guessed && <p className="Snowman-buttons">{generateButtons()}</p>}
+        {nWrong !== maxWrong && <p className="Snowman-buttons">{generateButtons()}</p>}
         <button onClick={restartGame}>Restart</button>
 
       </div>
