@@ -8,6 +8,8 @@ import img3 from "./3.png";
 import img4 from "./4.png";
 import img5 from "./5.png";
 import img6 from "./6.png";
+import { randomWord, ENGLISH_WORDS} from "./words.js"
+
 
 
 /** Snowman game: plays hangman-style game with a melting snowman.
@@ -25,19 +27,28 @@ import img6 from "./6.png";
 
 function Snowman({
       images=[img0, img1, img2, img3, img4, img5, img6],
-      words=["apple"],
+      words=ENGLISH_WORDS,
       maxWrong= images.length - 1,
     }) {
   /** by default, allow 6 guesses and use provided gallows images. */
 
   const [nWrong, setNWrong] = useState(0);
   const [guessedLetters, setGuessedLetters] = useState(() => new Set());
-  const [answer, setAnswer] = useState((words)[0]);
+  const [answer, setAnswer] = useState(randomWord(words));
+
+
+
+  function randomAnswer() {
+    const newWord = randomWord(words)
+    setAnswer(newWord);
+  }
 
   /** guessedWord: show current-state of word:
    if guessed letters are {a,p,e}, show "app_e" for "apple"
    */
+
   function guessedWord() {
+    console.log(answer);
     return answer
         .split("")
         .map(ltr => (guessedLetters.has(ltr) ? ltr : "_"));
@@ -78,13 +89,24 @@ function Snowman({
     return answer
   }
 
+  function restartGame() {
+    randomAnswer();
+    setGuessedLetters(() => new Set());
+    setNWrong(0);
+  }
+
+
+  const guessed = (nWrong !== maxWrong && answer !== [...guessedLetters].join(''));
+
   return (
       <div className="Snowman">
         <div className="nWrong">Number wrong: {nWrong}</div>
         <img src={(images)[nWrong]} alt={nWrong} />
         <p className="Snowman-word">{nWrong === maxWrong ? displayAnswer(): guessedWord()}</p>
+        {answer === [...guessedLetters].join('') && <p className="Snowman-lose">You win!</p> }
         {nWrong === maxWrong && <p className="Snowman-lose">You lose!</p> }
-        {nWrong !== maxWrong && <p className="Snowman-buttons">{generateButtons()}</p>}
+        {guessed && <p className="Snowman-buttons">{generateButtons()}</p>}
+        <button onClick={restartGame}>Restart</button>
 
       </div>
   );
